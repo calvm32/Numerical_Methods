@@ -1,10 +1,10 @@
 from math import *
 import matplotlib.pyplot as plt
+import numpy as np
 
-def bisection(f, f_prime, x0, zero_tol=1e-8, max_iters=30):
+def newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30):
     """
-    Find a root of f(x) in the interval [a,b] using Newton's method.
-    Requires [a,b] contains exactly one root that passes through the x-intersection
+    Find a root of f(x) near the initial guess x0 using Newton's method
     """
 
     x_prev = x0
@@ -21,7 +21,7 @@ def bisection(f, f_prime, x0, zero_tol=1e-8, max_iters=30):
 
         x_prev = x
     
-    return mid
+    return x
 
 # --------------------------
 # Test to find Dottie number
@@ -33,22 +33,50 @@ f_prime = lambda x: -sin(x) - 1
 # initial guess
 x0 = 5
 
-# list to check tolerance
+# lists to check tolerance and errors
 tol_list = []
-err_list = []
+norm_err_list = []
+diff_err_list = []
+
+# initial zero approximate
+prev_zero = x0
+
 for i in range(3,18):
     tol = 10**(-i)
-    zero = bisection(f, f_prime, x0, tol)
-    error = abs(f(zero))
-
     tol_list.append(tol)
-    err_list.append(error)
 
-plt.figure()
-plt.loglog(tol_list, err_list, "-o")
-plt.gca().invert_xaxis()
+    zero = newton(f, f_prime, x0, tol)
 
-plt.xlabel("tolerance")
-plt.ylabel("error")
+    # ---- residual error ----
+    norm_error = abs(f(zero))
+    norm_err_list.append(norm_error)
+
+    # ---- consecutive diff err ----
+    diff_error = abs(prev_zero - zero)
+    diff_err_list.append(diff_error)
+    prev_zero = zero
+
+# -----------
+# Plot errors
+# -----------
+
+# stop at machine precision
+norm = np.array(norm_err_list)
+diff = np.array(diff_err_list)
+
+eps = np.finfo(float).eps
+norm_plot = np.maximum(norm, eps)
+diff_plot = np.maximum(diff, eps)
+
+# plot
+fig, ax = plt.subplots(figsize=(10, 7))
+ax.loglog(tol_list, norm_plot, "-o", label=r"$|f(x_n)|$", color="tab:blue")
+ax.loglog(tol_list, diff_plot, "-o", label=r"$|x_n - x_{n-1}|$", color="tab:orange")
+
+ax.set_xlabel("tolerance"); ax.set_ylabel("error")
+ax.set_title("Newton's Method Error Comparison")
+ax.invert_xaxis(); ax.legend()
+ax.grid(True, which="major", ls="--", alpha=0.5)
+
 plt.tight_layout()
 plt.show()
