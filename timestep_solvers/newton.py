@@ -1,7 +1,8 @@
 from math import *
-from helper_functions import *
+import numpy as np
+from .helper_functions import *
 
-def truncated_newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30, dps=16):
+def truncated_newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30, dps=20):
     """
     Find a root of f(x) near the initial guess x0 using Newton's method
     """

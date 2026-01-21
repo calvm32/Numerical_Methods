@@ -1,4 +1,4 @@
-from timestep_solvers import bisection
+from timestep_solvers import truncated_bisection
 import matplotlib.pyplot as plt
 import numpy as np
 from math import *
@@ -57,7 +57,7 @@ for N in range(N_iter):
         tol = 10**(-i)
         tol_list.append(tol)
 
-        zero = bisection(f, a, b, tol)
+        zero = truncated_bisection(f, a, b, tol)
 
         # ---- residual error ----
         norm_error = abs(f(zero))
@@ -68,10 +68,17 @@ for N in range(N_iter):
         diff_err_list.append(diff_error)
         prev_zero = zero
 
-        # for lin regression
-        x_list.append(tol)
-        norm_y_list.append(norm_error)
-        diff_y_list.append(diff_error)
+        # machine epsilon
+        eps = np.finfo(float).eps
+
+        # protected values (same as plotting)
+        norm_val = max(norm_error, eps)
+        diff_val = max(diff_error, eps)
+
+        # store only masked values
+        x_list = np.append(x_list, tol)
+        norm_y_list = np.append(norm_y_list, norm_val)
+        diff_y_list = np.append(diff_y_list, diff_val)
 
     # -----------
     # Plot errors
@@ -89,9 +96,25 @@ for N in range(N_iter):
     ax.loglog(tol_list, norm_plot, "-o", color="tab:blue", alpha=opacity)
     ax.loglog(tol_list, diff_plot, "-o", color="tab:orange", alpha=opacity)
 
+# Fit linear regression
 log_x = np.log10(x_list)
 log_norm_y = np.log10(norm_y_list)
-log_diff_y = []
+log_diff_y = np.log10(diff_y_list)
+
+norm_slope, norm_intercept = np.polyfit(log_x, log_norm_y, 1)
+diff_slope, diff_intercept = np.polyfit(log_x, log_diff_y, 1)
+norm_intercept = 10**norm_intercept
+diff_intercept = 10**diff_intercept
+
+# Generate fitted line
+x_fit = np.logspace(-17, -3, 200)
+
+# Smooth x-values for line
+norm_y_fit = 10**(norm_slope * np.log10(x_fit) + norm_intercept)
+diff_y_fit = 10**(diff_slope * np.log10(x_fit) + diff_intercept)
+
+plt.loglog(x_fit, norm_y_fit, '-', label=f'Fit: y = {norm_intercept:.2f} x^{norm_slope:.2f}')
+plt.loglog(x_fit, diff_y_fit, '-', label=f'Fit: y = {diff_intercept:.2f} x^{diff_slope:.2f}')
 
 # pretend labels
 ax.loglog([0], [0], "-o", label=r"$|f(x_n)|$", color="tab:blue")

@@ -1,7 +1,8 @@
 from math import *
-from helper_functions import *
+import numpy as np
+from .helper_functions import *
 
-def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=16):
+def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=20):
     """
     Find a root of f(x) in the interval [a,b] using bisection method.
     Requires [a,b] contains exactly one root that passes through the x-intersection
@@ -10,18 +11,13 @@ def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=16):
     fa = truncate(f(a), dps) 
     fb = truncate(f(b), dps)
 
-    x_list = []
-
     # solve for the root
     for n in range(0, max_iters):
         mid = truncate((a+b)/2, dps)
         fmid = truncate(f(mid), dps)
-        
-        x_list.append(mid)
 
         if abs(fmid) < zero_tol:
-            print(n)
-            return mid, x_list
+            return mid
 
         if fmid*fa < 0:
             b = mid
@@ -30,6 +26,4 @@ def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=16):
             a = mid
             fa = truncate(f(a), dps)
     
-    print(mid)
-    print(x_list)
-    return mid, x_list
+    return mid
