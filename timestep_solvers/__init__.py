@@ -1,7 +1,7 @@
-from .bisection import bisection
-from .newton import newton
+from .bisection import truncated_bisection
+from .newton import truncated_newton
 
 __all__ = [
-    "bisection",
-    "newton"
+    "truncated_bisection",
+    "truncated_newton"
 ]

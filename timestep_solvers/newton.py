@@ -1,7 +1,7 @@
 from math import *
-import numpy as np
+from helper_functions import *
 
-def newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30):
+def truncated_newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30, dps=16):
     """
     Find a root of f(x) near the initial guess x0 using Newton's method
     """
@@ -11,9 +11,8 @@ def newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30):
     # solve for the root
     for n in range(0, max_iters):
 
-        x = x_prev - f(x_prev)/f_prime(x_prev)
-        
-        fnew = f(x)
+        x = truncate(x_prev - f(x_prev)/f_prime(x_prev), dps)
+        fnew = truncate(f(x), dps)
 
         if abs(fnew) < zero_tol:
             return x

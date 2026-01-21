@@ -1,10 +1,7 @@
 from math import *
-import matplotlib.pyplot as plt
-import math
-
 from helper_functions import *
 
-def truncated_bisection(f, a, b, dps=16, zero_tol=1e-8, max_iters=100):
+def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=16):
     """
     Find a root of f(x) in the interval [a,b] using bisection method.
     Requires [a,b] contains exactly one root that passes through the x-intersection
