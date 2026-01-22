@@ -15,13 +15,11 @@ def truncated_newton(f, f_prime, x0, zero_tol=1e-8, max_iters=30, dps=20):
         x = truncate(x_prev - f(x_prev)/f_prime(x_prev), dps)
         fnew = truncate(f(x), dps)
 
-        print(fnew)
-        print(zero_tol)
-
         if abs(fnew) <= zero_tol:
             return x
-            print("meets zero tol")
 
         x_prev = x
     
     return x
+
+    

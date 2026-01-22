@@ -13,8 +13,8 @@ N_iter = 100
 opacity = 0.2
 epsilon = 1e-1
 
-f = lambda x: (x**2 - x)
-f_prime = lambda x: 2*x - 1
+f = lambda x: (cos(x) - x)
+f_prime = lambda x: -sin(x) - 1
 
 # initial guesses
 a0 = 0.2
@@ -173,7 +173,7 @@ N_norm_intercept = 10**N_norm_intercept
 N_diff_intercept = 10**N_diff_intercept
 
 # plot best-fit lines w small black outline
-ax1.loglog(B_x_fit, B_norm_y_fit, '-', color='black', linewidth=5)
+"""ax1.loglog(B_x_fit, B_norm_y_fit, '-', color='black', linewidth=5)
 ax1.loglog(B_x_fit, B_diff_y_fit, '-', color='black', linewidth=5)
 ax1.loglog(B_x_fit, B_norm_y_fit, '-', label=f'Fit: y = {B_norm_intercept:.2f} x^{B_norm_slope:.2f}', color="tab:blue", linewidth=3.5)
 ax1.loglog(B_x_fit, B_diff_y_fit, '-', label=f'Fit: y = {B_diff_intercept:.2f} x^{B_diff_slope:.2f}', color="tab:orange", linewidth=3.5)
@@ -182,7 +182,7 @@ ax2.loglog(N_x_fit, N_norm_y_fit, '-', color='black', linewidth=5)
 ax2.loglog(N_x_fit, N_diff_y_fit, '-', color='black', linewidth=5)
 ax2.loglog(N_x_fit, N_norm_y_fit, '-', label=f'Fit: y = {N_norm_intercept:.2f} x^{N_norm_slope:.2f}', color="tab:blue", linewidth=3.5)
 ax2.loglog(N_x_fit, N_diff_y_fit, '-', label=f'Fit: y = {N_diff_intercept:.2f} x^{N_diff_slope:.2f}', color="tab:orange", linewidth=3.5)
-
+"""
 # pretend labels
 ax1.loglog([0], [0], "-o", label=r"$|f(x_n)|$", color="tab:blue")
 ax1.loglog([0], [0], "-o", label=r"$|x_n - x_{n-1}|$", color="tab:orange")
