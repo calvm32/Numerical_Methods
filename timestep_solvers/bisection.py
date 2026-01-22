@@ -19,6 +19,7 @@ def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=20):
         # quit if interval length is small enough
         if abs((b-a)/2) < zero_tol:
             return mid
+            print("meets tol requirement: " + mid)
 
         if fmid*fa < 0:
             b = mid
@@ -28,3 +29,4 @@ def truncated_bisection(f, a, b, zero_tol=1e-8, max_iters=100, dps=20):
             fa = truncate(f(a), dps)
     
     return mid
+    print(mid)
