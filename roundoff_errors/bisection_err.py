@@ -103,18 +103,22 @@ log_diff_y = np.log10(diff_y_list)
 
 norm_slope, norm_intercept = np.polyfit(log_x, log_norm_y, 1)
 diff_slope, diff_intercept = np.polyfit(log_x, log_diff_y, 1)
-norm_intercept = 10**norm_intercept
-diff_intercept = 10**diff_intercept
-
-# Generate fitted line
-x_fit = np.logspace(-17, -3, 200)
 
 # Smooth x-values for line
+x_fit = np.logspace(-17, -3, 200)
+
 norm_y_fit = 10**(norm_slope * np.log10(x_fit) + norm_intercept)
 diff_y_fit = 10**(diff_slope * np.log10(x_fit) + diff_intercept)
 
-plt.loglog(x_fit, norm_y_fit, '-', label=f'Fit: y = {norm_intercept:.2f} x^{norm_slope:.2f}')
-plt.loglog(x_fit, diff_y_fit, '-', label=f'Fit: y = {diff_intercept:.2f} x^{diff_slope:.2f}')
+norm_intercept = 10**norm_intercept
+diff_intercept = 10**diff_intercept
+
+# plot best-fit lines w small black outline
+plt.loglog(x_fit, norm_y_fit, '-', color='black', linewidth=5)
+plt.loglog(x_fit, diff_y_fit, '-', color='black', linewidth=5)
+
+plt.loglog(x_fit, norm_y_fit, '-', label=f'Fit: y = {norm_intercept:.2f} x^{norm_slope:.2f}', color="tab:blue", linewidth=3.5)
+plt.loglog(x_fit, diff_y_fit, '-', label=f'Fit: y = {diff_intercept:.2f} x^{diff_slope:.2f}', color="tab:orange", linewidth=3.5)
 
 # pretend labels
 ax.loglog([0], [0], "-o", label=r"$|f(x_n)|$", color="tab:blue")
