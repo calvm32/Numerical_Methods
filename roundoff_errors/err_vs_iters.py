@@ -20,7 +20,7 @@ f_prime = lambda x: -sin(x) - 1
 a0 = 0.2
 b0 = 1
 
-x00 = 2
+x00 = 5
 
 # machine epsilon
 eps = np.finfo(float).eps
